@@ -1,11 +1,338 @@
+<!DOCTYPE html>
 <html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1040">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta name="keywords" content="python,wsgi,framework,web application,web service">
+<meta itemprop="description" name="description" content="webpie is a Python web application development framework">
+<meta name="author" content="Igor Mandrichenko">
+<title>WebPie - web application framework for Python</title>
+<style>
+
+html {
+  font: 16px/1.5em "Helvetica Neue", Helvetica, sans-serif;
+  min-width: 1040px;
+  margin: 0;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 1em 0 4em 0;
+}
+
+h1 {
+  color: #555;
+  font-size: 64px;
+  font-weight: 200;
+  letter-spacing: -2px;
+  white-space: nowrap;
+  margin-top: 20px;
+}
+
+h1,
+h2 {
+  text-rendering: optimizeLegibility;
+}
+
+h2 {
+  margin-top: 2em;
+}
+
+h2 a {
+  color: #ccc;
+  left: -20px;
+  position: absolute;
+  width: 740px;
+}
+
+footer {
+  font-size: small;
+  margin-top: 8em;
+}
+
+header aside {
+  margin-top: 82px;
+}
+
+header aside,
+footer aside {
+  color: #636363;
+  text-align: right;
+}
+
+aside {
+  font-size: small;
+  left: 780px;
+  position: absolute;
+  width: 180px;
+}
+
+.column {
+  margin: auto;
+  width: 720px;
+  padding-right: 240px;
+  position: relative;
+}
+
+a {
+  color: steelblue;
+}
+
+a:not(:hover) {
+  text-decoration: none;
+}
+
+pre,
+code {
+  font-family: "Menlo", monospace;
+  -webkit-text-size-adjust: 100%;
+}
+
+code {
+  line-height: 1em;
+}
+
+pre {
+  padding-left: 18px;
+  margin: 2em 0 2em -20px;
+}
+
+.html .string {
+  color: #756bb1;
+}
+
+.html .tag,
+.css .tag {
+  color: #3182bd;
+}
+
+.comment {
+  color: #636363;
+}
+
+.html .doctype {
+  color: #31a354;
+}
+
+.html .attr,
+.css .attr {
+  color: #e6550d;
+}
+
+ul.nobullet li {
+    list-style-type: none;    
+}
+
+dl.args dt {
+    font-weight: bold;
+}
+
+
+code {
+    border-left: solid 2px #ccc;
+}
+code.python {
+    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+    font-size: 12px;
+}
+
+</style>
+
+
+<link rel="stylesheet" href="highlight/github.css">
+<script src="highlight/highlight.min.js"></script>
+
+<!--
+<link rel="stylesheet"
+      href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/default.min.css">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/highlight.min.js"></script>
+-->
+
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
 
 <body>
-    
-    <h1>WebPie - web application framework for Python</h1>
-    
-    <a href="http://github.com/webpie/webpie">GitHub repository</a>
-    
-</body>
 
+<div class="column">
+<p class="header">
+  <b><a href="./">Overview</a></b>
+  <a style="margin-left:1em;" href="samples">Examples</a>
+  <a style="margin-left:1em;" href="docs">Documentation</a>
+  <a style="margin-left:1em;" href="https://github.com/webpie/webpie">Source</a>
+</p>
+
+<h1>WebPie</h1>
+
+</div>
+
+<div class="column">
+
+<aside>See <a href="https://observablehq.com/@d3/gallery">more examples</a>.</aside>
+
+<p><b>WebPie</b> is a <b>web</b> applications development framework for <b>Py</b>thon. 
+<b>WebPie</b> helps you develop simple or sophisticated web applications quickly and intuitively.
+It lets you structure your code in terms of classes rather than in terms of functions,
+which helps you and your team to develop, share and maintain the code in most efficient way.
+</p>
+
+<h2>Hello, world!</h2>
+
+<p>Here is your "Hello World!" web application in <b>WebPie</b>:</p>
+
+<pre>
+<code class="python">
+    # hello_world_server.py
+    from webpie import WPApp, WPHandler                         # 1
+
+    class MyHandler(WPHandler):                                 # 2
+        def hello(self, request, relpath, **args):              # 3
+            return "Hello, World!\n"                            # 4
+
+    WPApp(MyHandler).run_server(8080)                           # 5
+    
+</code>
+</pre>
+
+<p>Here is what we just did, line by line:
+    
+    <ul class=nobullet>
+        <li>#1 -- Import class definitions from <b>WebPie</b> module.</li>
+            
+        <li>#2 -- Define your own Handler class. <b>WebPie</b> will create a new instance of this class for every
+            request received by the server.
+        </li>
+        
+        <li>#3 -- Define a handler method. The name of this method will be matched to the URI path component.
+        </li>
+        
+        <li>#4 -- This will be the contents of the HTTP responce produced by the Handler.
+        </li>
+        
+        <li>#5 -- Create your web server application and run it as a HTTP server listening on port 8080.
+        </li>
+    </ul>
+</p>
+
+<p>If you run this script, it will become a web server, which will respond to URI "/hello":</p>
+
+<pre>
+<code class="shell">
+    $ curl http://localhost:8080/hello
+    Hello, World!
+    $
+    
+</code>
+</pre>
+
+
+<p>When the client connects to the server on port 8080 and sends an HTTP request for URI /hello, the HTTP
+    server receives the request, parses it into a WebOb Request object and then sends it to the WPApp object. 
+    Notice that WPApp object is created once
+    and it exists as long as your application running. Every time the WPApp object receives the HTTP request,
+    if creates new Handler object and then maps the URI to the Handler method by name. In this simple case,
+    the URI path consists of single component "hello" and it is mapped to the Handler's method "hello".
+</p>
+
+<p>The method <b>hello</b> gets invoked with the following arguments:
+    
+    <dl class=args>
+        <dt>request<dt>
+            <dd>WebOb object with parsed HTTP request.</dd>
+            
+        <dt>relpath</dt>
+            <dd>text string with the remainder of the path beyond the method name. If the client issues
+                a request for URI "/hello/world", then the <i>relpath</i> argument value will be "world".
+            </dd>
+                
+        <dt>**args</dt>
+            <dd>If the URI contains query arguments (e.g. ?a=b&c=d), then their values will be passed as named
+                arguments to the method
+            </dd>
+    </dl>
+    
+</p>
+
+<h2>relpath and **args</h2>
+
+<p>Let's build a web server, which will respond with current time formatted in various ways:
+
+<ul>
+    <li>Numeric UNIX timestamp</li>
+    <li>Text representation</li>
+    <li>JSON dictionary</li>
+    <li>Date/time parts</li>
+</ul>
+
+<pre><code class="python">
+    # time_server.py
+    
+    from webpie import WPApp, WPHandler
+    from datetime import datetime
+    import time
+
+    class TimeHandler(WPHandler):   
+    
+            def clock(self, request, relpath, format="number"):             # 1
+            
+                t = time.time()
+                if format=="number":
+                    return str(t)+"\n", "text/plain"                        
+                elif format=="text":
+                    return time.ctime(t)+"\n", "text/plain"
+                elif format == "json":
+                    return '{"clock":%f}\n' % (t,), "text/json"             # 2
+                else:
+                    return "Unknown format %s\n" % (format,), 400           # 3
+
+            def time(self, request, relpath):                               # 4
+            
+                    t = datetime.now()
+                    if relpath == "year":
+                            return str(t.year)+"\n"
+                    elif relpath == "month":
+                            return str(t.month)+"\n"
+                    elif relpath == "day":
+                            return str(t.day)+"\n"
+                    elif relpath == "hour":
+                            return str(t.hour)+"\n"
+                    elif relpath == "minute":
+                            return str(t.minute)+"\n"
+                    elif relpath == "second":
+                            return str(t.second)+"\n"
+                    else:
+                            return str(t)+"\n"
+
+    WPApp(TimeHandler).run_server(8080)
+    
+</code>
+</pre>
+
+<p>New features here:
+    <ul class=nobullet>
+        <li>#1 -- method <span class=highlight>clock</span>  
+                will accept query argument <span class=highlight>format</span> 
+            with default value "number". So if the request URI
+            looks like ".../clock?format=text", then the <span class=highlight>format</span> argument will
+            have value "text"
+        </li>
+            
+        <li>#2 -- web methods can return their results in many different ways. In this case, the return
+            is the tuple of two elements: response body with the JSON output and 
+            Content-Type HTTP header value "text/json"        
+        </li>
+        
+        <li>#3 -- yet another way to format the web method output. This time, it is the combination of 
+            the response body with the error message and integer HTTP response status
+        </li>
+    </ul>
+</p>
+
+<h2></h2>
+
+
+
+</body>
 </html>
