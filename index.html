@@ -9,137 +9,9 @@
 <meta itemprop="description" name="description" content="webpie is a Python web application development framework">
 <meta name="author" content="Igor Mandrichenko">
 <title>WebPie - web application framework for Python</title>
-<style>
-
-html {
-  font: 16px/1.5em "Helvetica Neue", Helvetica, sans-serif;
-  min-width: 1040px;
-  margin: 0;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-}
-
-body {
-  margin: 1em 0 4em 0;
-}
-
-h1 {
-  color: #555;
-  font-size: 64px;
-  font-weight: 200;
-  letter-spacing: -2px;
-  white-space: nowrap;
-  margin-top: 20px;
-}
-
-h1,
-h2 {
-  text-rendering: optimizeLegibility;
-}
-
-h2 {
-  margin-top: 2em;
-}
-
-h2 a {
-  color: #ccc;
-  left: -20px;
-  position: absolute;
-  width: 740px;
-}
-
-footer {
-  font-size: small;
-  margin-top: 8em;
-}
-
-header aside {
-  margin-top: 82px;
-}
-
-header aside,
-footer aside {
-  color: #636363;
-  text-align: right;
-}
-
-aside {
-  font-size: small;
-  left: 780px;
-  position: absolute;
-  width: 180px;
-}
-
-.column {
-  margin: auto;
-  width: 720px;
-  padding-right: 240px;
-  position: relative;
-}
-
-a {
-  color: steelblue;
-}
-
-a:not(:hover) {
-  text-decoration: none;
-}
-
-pre,
-code {
-  font-family: "Menlo", monospace;
-  -webkit-text-size-adjust: 100%;
-}
-
-code {
-  line-height: 1em;
-}
-
-pre {
-  padding-left: 18px;
-  margin: 2em 0 2em -20px;
-}
-
-.html .string {
-  color: #756bb1;
-}
-
-.html .tag,
-.css .tag {
-  color: #3182bd;
-}
-
-.comment {
-  color: #636363;
-}
-
-.html .doctype {
-  color: #31a354;
-}
-
-.html .attr,
-.css .attr {
-  color: #e6550d;
-}
-
-ul.nobullet li {
-    list-style-type: none;    
-}
-
-dl.args dt {
-    font-weight: bold;
-}
+<link rel="stylesheet" href="style.css"/>
 
 
-code {
-    border-left: solid 2px #ccc;
-}
-code.python {
-    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
-    font-size: 12px;
-}
-
-</style>
 
 
 <link rel="stylesheet" href="highlight/github.css">
@@ -156,180 +28,319 @@ code.python {
 
 <body>
 
-<div class="column">
+<div class="container">
 
-<p class="header">
-  <a style="margin-left:1em;" href="https://webpie.readthedocs.io/">Documentation</a>
-  <a style="margin-left:1em;" href="https://github.com/webpie/webpie">Source</a>
-</p>
+    <div id="banner">
+        <h1><span class="webpie">WebPie</span></h1>
+    </div>
 
-<h1>WebPie</h1>
 
-</div>
+    <table class="layout">
+        <tr>
+            <td class="main">
+                <p><span class="webpie">WebPie</span> is a simple, intuitive, object-oriented web applications development framework for Python. 
+                <span class="webpie">WebPie</span> helps you develop web applications quickly and structure them in terms of classes
+                to organize your code and development effort more efficiently.
+                </p>
 
-<div class="column">
+                <h2>Hello, world!</h2>
 
-<p><b>WebPie</b> is a <b>web</b> applications development framework for <b>Py</b>thon. 
-<b>WebPie</b> helps you develop simple or sophisticated web applications quickly and intuitively.
-It lets you structure your code in terms of classes rather than in terms of functions,
-which helps you and your team to develop, share and maintain the code in most efficient way.
-</p>
+                <p>Here is the "Hello World!" web application in <span class="webpie">WebPie</span>:</p>
 
-<h2>Hello, world!</h2>
+                <pre>
+                <code class="python">
 
-<p>Here is your "Hello World!" web application in <b>WebPie</b>:</p>
+                    from webpie import WPApp, WPHandler                       #1
 
-<pre>
-<code class="python">
-    # hello_world_server.py
-    from webpie import WPApp, WPHandler                         # 1
+                    class Greeter(WPHandler):                                 #2
+                    
+                        def hello(self, request, relpath, **args):            #3
+                            return "Hello, World!\n"                          #4
 
-    class MyHandler(WPHandler):                                 # 2
-        def hello(self, request, relpath, **args):              # 3
-            return "Hello, World!\n"                            # 4
+                    application = WPApp(Greeter)                              #5
+                    application.run_server(8080)                              #6
 
-    WPApp(MyHandler).run_server(8080)                           # 5
-    
-</code>
-</pre>
+                </code>
+                </pre>
 
-<p>Here is what we just did, line by line:
-    
-    <ul class=nobullet>
-        <li>#1 -- Import class definitions from <b>WebPie</b> module.</li>
-            
-        <li>#2 -- Define your own Handler class. <b>WebPie</b> will create a new instance of this class for every
-            request received by the server.
-        </li>
+                <p>Here is what we just did, line by line:
+
+                    <ul class=nobullet>
+                        <li>#1 -- Import class definitions.</li>
         
-        <li>#3 -- Define a handler method. The name of this method will be matched to the URI path component.
-        </li>
-        
-        <li>#4 -- This will be the contents of the HTTP responce produced by the Handler.
-        </li>
-        
-        <li>#5 -- Create your web server application and run it as a HTTP server listening on port 8080.
-        </li>
-    </ul>
-</p>
-
-<p>If you run this script, it will become a web server, which will respond to URI "/hello":</p>
-
-<pre>
-<code class="shell">
-    $ curl http://localhost:8080/hello
-    Hello, World!
-    $
+                        <li>#2 -- Define your request handler class.</li>
     
-</code>
-</pre>
-
-
-<p>When the client connects to the server on port 8080 and sends an HTTP request for URI /hello, the HTTP
-    server receives the request, parses it into a WebOb Request object and then sends it to the WPApp object. 
-    Notice that WPApp object is created once
-    and it exists as long as your application running. Every time the WPApp object receives the HTTP request,
-    if creates new Handler object and then maps the URI to the Handler method by name. In this simple case,
-    the URI path consists of single component "hello" and it is mapped to the Handler's method "hello".
-</p>
-
-<p>The method <b>hello</b> gets invoked with the following arguments:
+                        <li>#3 -- Define a handler method. This method name will be mapped to the element of the URI path.</li>
     
-    <dl class=args>
-        <dt>request<dt>
-            <dd>WebOb object with parsed HTTP request.</dd>
-            
-        <dt>relpath</dt>
-            <dd>text string with the remainder of the path beyond the method name. If the client issues
-                a request for URI "/hello/world", then the <i>relpath</i> argument value will be "world".
-            </dd>
+                        <li>#4 -- Return the response body.
+                        </li>
+    
+                        <li>#5 -- Create your web server application.
+                        </li>
+                        <li>#6 -- Run run the applicatoon as a HTTP server listening on port 8080.
+                        </li>
+                    </ul>
+                </p>
+
+                <p>If you run this script, it will respond to "/hello" URI:</p>
+
+                <pre>
+                <code class="shell">
+                    $ curl http://localhost:8080/hello
+                    Hello, World!
+                    $
+
+                </code>
+                </pre>
+
+
+                <h2>WSGI</h2>
+
+                <p>
+                    <span class="webpie">WebPie</span> application is a standard WSGI application object. It can be plugged into any HTTP server which accepts
+                    WSGI applications, such as nginx/uWSGI or Apache httpd/mod_wsgi. For example, here is how you can run
+                    a WebPie application under uWSGI:
+                </p>
+                    
+                <pre>
+                <code class="python">
+                    # clock.py
+
+                    from webpie import WPApp, WPHandler                       
+                    import time
+
+                    class Clock(WPHandler):                                
+
+                        def time(self, request, relpath):          
+                            return time.ctime()
+
+                    app = WPApp(Clock)                             
+
+                </code>
+                </pre>
+                    
+                <pre>
+                <code class="shell">
+                    $ uwsgi --http :8080 --wsgi-file clock.py &
+                    
+                    $ curl http://localhost:8080/time
+                    Fri Jun 19 11:26:53 2020
+                    $
+
+                </code>
+                </pre>
+
+                <h2>URI Structure</h2>
+
+                <p>If you want to combine the Greeter and the Clock into a single web server, you can do it
+                    by builidng a tree of the request handlers:
+                </p>
+
+                <pre>
+                <code class="python">
+                    from webpie import WPApp, WPHandler                       
+                    import time
+
+                    class Clock(WPHandler):                                
+
+                        def time(self, request, relpath):          
+                            return time.ctime()
+
+                    class Greeter(WPHandler):                                
+                    
+                        def hello(self, request, relpath, **args):           
+                            return "Hello, World!\n"           
+                            
+                    class Combined(WPHandler):
+                    
+                        def __init__(self, app):
+                            WPHandler.__init__(self, request, app)
+                            self.clock = Clock(request, app)
+                            self.greet = Greeter(request, app)
+
+                    WPApp(Combined).run_server(8080)                         
+
+                </code>
+                </pre>
+
+                <p>If you run this application, it will respond to both kinds of requests and the URI structure will reflect the nested handler structure:</p>
+
+                <pre>
+                <code class="shell">
+                    $ curl http://localhost:8080/clock/time
+                    Fri Jun 19 11:26:53 2020
+                    
+                    $ curl http://localhost:8080/greet/hello
+                    Hello, World!
+                    $
+                    
+                </code>
+                </pre>
                 
-        <dt>**args</dt>
-            <dd>If the URI contains query arguments (e.g. ?a=b&c=d), then their values will be passed as named
-                arguments to the method
-            </dd>
-    </dl>
-    
-</p>
+                <p>Notice that URI path element <span class="code">clock</span> maps to the <span class="code">Combined</span>'s 
+                    <span class="code">self.clock</span> 
+                    member, and similarily URI element <span class="code">greet</span> corresponds to the
+                    <span class="code">Combined</span>'s <span class="code">self.greet</span> member.
+                </p>
+                
+                <p>The fact that URI structure maps directly onto the handler's class structure and that each handler is responsible for
+                    its own URI path subtree makes it possible to use relative URIs inside the response generated by the handler. 
+                    For example, let's say you have a handler responsible for user authentication:
+                </p>
 
-<h2>relpath and **args</h2>
+                <pre>
+                <code class="python">
+                    from webpie import WPApp, WPHandler                       
 
-<p>Let's build a web server, which will respond with current time formatted in various ways:
+                    class Auth(WPHandler):                                
+                    
+                        def login_form(self, request, relpath, message=None, **args):           
+                            return login_form
+                            
+                        def do_login(self, request, relpath, **args):
+                            # read the login_form and authenticate the user
+                            if authenticated:
+                                # login OK - go back to the top handler
+                                self.redirect("../index")       
+                            else:
+                                # try again
+                                self.redirect("./login_form?message=Login+failed")
+                                
+                    class Top(WPHandler):
+                    
+                        def __init__(self, request, app):
+                            WPHandler.__init__(self, request, app)
+                            self.auth = Auth(request, app)
+                            
+                        def index(self, request, relpath, **args):
+                            # main entry point
+                            
 
-<ul>
-    <li>Numeric UNIX timestamp</li>
-    <li>Text representation</li>
-    <li>JSON dictionary</li>
-    <li>Date/time parts</li>
-</ul>
+                    app = WPApp(Top)                        
 
-<pre><code class="python">
-    # time_server.py
-    
-    from webpie import WPApp, WPHandler
-    from datetime import datetime
-    import time
+                </code>
+                </pre>
 
-    class TimeHandler(WPHandler):   
-    
-            def clock(self, request, relpath, format="number"):             # 1
+                <p>The <span class="code">Top</span> handler can use relative URI <span class="code">"./auth/login_form"</span> to refer to the login form shown by
+                    the authentication handler. And the login form can refer to the actual authentication menthod <span class="code">do_login</span>
+                    as <span class="code">"./do_login"</span>:
+                </p>
+
+                <pre>
+                    <code class="html">
+                    
+                        &lt;html&gt;
+                        &lt;!-- login form --&gt;
+                        ...
+                            &lt;form action="./do_login"&gt;
+                                ...
+                            &lt;/form&gt;
+                        ...
+                        &lt;/html&gt;
+                    </code>
+                </pre>
+
+                <pre>
+                    <code class="html">
+                    
+                        &lt;html&gt;
+                        &lt;!-- main page --&gt;
+                        ...
+                            &lt;a href="./auth/login_form"&gt;log in&lt;a&gt;
+                        ...
+                        &lt;/html&gt;
+                    </code>
+                </pre>
+                
+            <h2>Other Features</h2>
             
-                t = time.time()
-                if format=="number":
-                    return str(t)+"\n", "text/plain"                        
-                elif format=="text":
-                    return time.ctime(t)+"\n", "text/plain"
-                elif format == "json":
-                    return '{"clock":%f}\n' % (t,), "text/json"             # 2
-                else:
-                    return "Unknown format %s\n" % (format,), 400           # 3
-
-            def time(self, request, relpath):                               # 4
-            
-                    t = datetime.now()
-                    if relpath == "year":
-                            return str(t.year)+"\n"
-                    elif relpath == "month":
-                            return str(t.month)+"\n"
-                    elif relpath == "day":
-                            return str(t.day)+"\n"
-                    elif relpath == "hour":
-                            return str(t.hour)+"\n"
-                    elif relpath == "minute":
-                            return str(t.minute)+"\n"
-                    elif relpath == "second":
-                            return str(t.second)+"\n"
-                    else:
-                            return str(t)+"\n"
-
-    WPApp(TimeHandler).run_server(8080)
-    
-</code>
-</pre>
-
-<p>New features here:
-    <ul class=nobullet>
-        <li>#1 -- method <span class=highlight>clock</span>  
-                will accept query argument <span class=highlight>format</span> 
-            with default value "number". So if the request URI
-            looks like ".../clock?format=text", then the <span class=highlight>format</span> argument will
-            have value "text"
-        </li>
-            
-        <li>#2 -- web methods can return their results in many different ways. In this case, the return
-            is the tuple of two elements: response body with the JSON output and 
-            Content-Type HTTP header value "text/json"        
-        </li>
-        
-        <li>#3 -- yet another way to format the web method output. This time, it is the combination of 
-            the response body with the error message and integer HTTP response status
-        </li>
-    </ul>
-</p>
-
-<h2></h2>
+            <ul>
+                <li><span class="webpie">WebPie</span> lets you build multi-threaded applications</li>
+                <li>Sessions support with persistent data storage</li>
+                <li><span class="webpie">WebPie</span> uses WebOb to parse and represent the received HTTP request and to form the response</li>
+                <li>HTTP request query parameters are passed to the web service methods as Python named arguments</li>
+                <li>Jinja2 - friendly</li>
+                <li>Built-in multi-treaded HTTP/HTTPS server with thread control, which can run as a process or a thread</li>
+                <li>HTTP server supports access to static content</li>
+                <li>WebSockets support</li>
+            </ul>
+                
+        </td>   <!-- main -->
+            <td class="right">
+                <p id="links">
+                  <a href="https://webpie.readthedocs.io/">Documentation</a><br/>
+                  <a href="https://github.com/webpie/webpie">Source</a><br/>
+                  <a href="https://pypi.python.org/pypi/webpie">PyPi</a><br/>
+                </p>
+            </td>   <!-- right -->
+        </tr>       <!-- first row -->
+    </table>
+</div>      <!-- container -->
 
 
+      <script>
+          function trim_white(tag, cls)
+          {
+              var elements = document.getElementsByTagName(tag);
+              for (var e of elements)
+              {
+                  if( e.className == cls)
+                  {
+                      var text = e.innerHTML;
+                      var lines = [];
+                      var nwhite = null;
+                      for( var line of text.split("\n") )
+                      {
+                          var trimmed = line.trim();
+                          if( trimmed != "" )
+                          {
+                              const leading_space = /^\s+/
+                              var match = line.match(leading_space);
+                              if( match != null )
+                              {
+                                  const l = match[0].length;
+                                  if( nwhite == null || l < nwhite )
+                                      nwhite = l;
+                              }
+                              lines.push(line);
+                          }
+                          else
+                              lines.push("");
+                      }
+
+                      var in_leading_white = true;
+                      var n_blank = 0;
+
+                      var out_lines = [];
+
+                      for( line of lines )
+                      {
+                          if( line != "" )
+                          {
+                              if( in_leading_white )
+                                  in_leading_white = false;
+                              else
+                              {
+                                  var i;
+                                  for( i=0; i<n_blank; i++ )
+                                      out_lines.push("");
+                              }
+                              n_blank = 0;
+                              out_lines.push(line.substr(nwhite));
+                          }
+                          else
+                              n_blank ++;
+                      }
+                  
+                      e.innerHTML = out_lines.join("\n");
+                  }
+              }
+          }
+          
+          trim_white("code", "python");
+          trim_white("code", "shell");
+          trim_white("code", "html");
+      </script>
 
 </body>
 </html>
