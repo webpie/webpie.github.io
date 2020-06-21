@@ -256,17 +256,25 @@
                 
             <h2>The Shortest Web Service</h2>
                 
-                <p>And here is probably the shortest working web service possible:</p>
+                <p>And here is probably the shortest web service possible. And yes, it is a bit hard to read, but it works:</p>
                 
                 <pre>
                 <code class="python">
-
                     from webpie import WPApp
-
-                    WPApp(lambda r,p,x: f"{int(x)**2}").run_server(8888)
-                    
+                    WPApp(lambda _, x: f"{int(x)**2}\n").run_server(8888)
                 </code>
                 </pre>
+                
+                <pre>
+                <code class="shell">
+                    $ curl http://localhost:8888/2
+                    4
+                    $ curl http://localhost:8888/3
+                    9
+                    $ curl http://localhost:8888/4
+                    16
+                 </code>
+                 </pre>
                 
                 
             <h2>Other Features</h2>
