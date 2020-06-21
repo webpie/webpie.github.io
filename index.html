@@ -254,6 +254,21 @@
                     </code>
                 </pre>
                 
+            <h2>The Shortest Web Service</h2>
+                
+                <p>And here is probably the shortest working web service possible:</p>
+                
+                <pre>
+                <code class="python">
+
+                    from webpie import WPApp
+
+                    WPApp(lambda r,p,x: f"{int(x)**2}").run_server(8888)
+                    
+                </code>
+                </pre>
+                
+                
             <h2>Other Features</h2>
             
             <ul>
