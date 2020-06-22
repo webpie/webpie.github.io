@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-170295582-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-170295582-1');
+</script>
+    
 <meta charset="utf-8">
 <meta name="viewport" content="width=1040">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -280,12 +291,14 @@
             <h2>Other Features</h2>
             
             <ul>
-                <li><span class="webpie">WebPie</span> lets you build multi-threaded applications</li>
-                <li>Sessions support with persistent data storage</li>
-                <li><span class="webpie">WebPie</span> uses <a href="https://webob.org/">WebOb</a> to parse and represent the received HTTP request and to form the response</li>
-                <li>HTTP request query parameters are passed to the web service methods as Python named arguments</li>
-                <li><a href="https://jinja.palletsprojects.com/">Jinja2</a> - friendly</li>
-                <li>Built-in multi-treaded HTTP/HTTPS server with thread control, which can run as a process or a thread</li>
+                <li><span class="webpie">WebPie</span> uses <a href="https://webob.org/">WebOb</a> to parse and represent the received HTTP request and to produce the response</li>
+                <li><span class="webpie">WebPie</span> lets you build multi-threaded web services. Each (concurrent) HTTP request is handled by its own
+                    Handler object, which uses its own Request object as input. This way the Handlers are completely isolted and independent from each other. But if needed, they
+                    can syncronize using shared persistent WPApp object.
+                </li>
+                <li><span class="webpie">WebPie</span> sessions with persistent data storage</li>
+                <li><a href="https://jinja.palletsprojects.com/">Jinja2</a> - friendly, but does not require Jinja2 to be installed</li>
+                <li>Built-in multi-treaded HTTP/HTTPS server with thread control, which can run as a thread</li>
                 <li>HTTP server supports access to static content</li>
                 <li>WebSockets support</li>
             </ul>
