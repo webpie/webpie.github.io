@@ -121,7 +121,8 @@ code {
   /* -webkit-text-size-adjust: 100%; */
 }
 
-span.code {
+span.code,
+dt {
     color: #008;
 }
 

@@ -55,21 +55,19 @@
                 </p>
 
                 <h2>Hello, world!</h2>
-
-                <p>Here is the "Hello World!" web application in <span class="webpie">WebPie</span>:</p>
+                
+                <p>Here is the shortest web server application created with WebPie</p>
 
                 <pre>
                 <code class="python">
 
-                    from webpie import WPApp, WPHandler                       #1
-
-                    class Greeter(WPHandler):                                 #2
+                    from webpie import WPApp                                  #1
                     
-                        def hello(self, request, relpath, **args):            #3
-                            return "Hello, World!\n"                          #4
+                    def hello(request, relpath, **args):                      #2
+                        return "Hello, World!\n"                              #3
+                    
+                    WPApp(hello).run_server(8080)                             #4
 
-                    application = WPApp(Greeter)                              #5
-                    application.run_server(8080)                              #6
 
                 </code>
                 </pre>
@@ -77,34 +75,180 @@
                 <p>Here is what we just did, line by line:
 
                     <ul class=nobullet>
-                        <li>#1 -- Import class definitions.</li>
+                        <li>#1 -- Import <span class="webpie">WebPie</span> aplication class definitions.</li>
         
-                        <li>#2 -- Define your request handler class.</li>
+                        <li>#2 -- Define simple request handler funciton.</li>
     
-                        <li>#3 -- Define a handler method. This method name will be mapped to the element of the URI path.</li>
+                        <li>#3 -- The function simply returns constant response.</li>
     
-                        <li>#4 -- Return the response body.
-                        </li>
-    
-                        <li>#5 -- Create your web server application.
-                        </li>
-                        <li>#6 -- Run run the applicatoon as a HTTP server listening on port 8080.
-                        </li>
+                        <li>#5 -- Create and run your web server application.</li>
+                    </li>
                     </ul>
                 </p>
+                
+                <p>This simple server will respond to any URI with constant response, regarless of the
+                    URI.
+                </p>
 
-                <p>If you run this script, it will respond to "/hello" URI:</p>
+                <p>The <span class="code">hello</span> handler function is a <i>web method</i>.
+                    In <span class="webpie">WebPie</span> a web method always has two positional
+                    arguments and some keyword arguments. The two positional arguments are:
+                </p>
+                
+                <dl>
+                    <dt><span class="code">request</span><dt>
+                    <dd>a <a href="https://webob.org/">WebOb</a> Request object. <span class="webpie">WebPie</span>
+                        parses incoming HTTP request and stores its information into a WebOb request.
+                    </dd>
+                    
+                    <dt><span class="code">relpath</span><dt>
+                    <dd>potion of the URI path left unused after <span class="webpie">WebPie</span>
+                        translated the URI path into actual web method. In this trivial example,
+                        no translation is actually done and relpath will always hold the entire URI path
+                        portion since none of it will be used. In the real life, <span class="code">relpath</span>
+                        will hold the tail of the URI path, and usually will be empty.
+                    </dd>
+                    
+                    <dt>keyword arguments</dt>
+                    <dd>if the request URI had some query arguments like <span class="code">a=2&x=y</span>, then
+                        the web method would be called with parsed query parameters passed as the keyword
+                        arguments.
+                    </dd>
+                </dl>
+                    
+                    
+                <p>Here is a bit more sophisticated example illustrating some of the web method features</p>
 
                 <pre>
-                <code class="shell">
-                    $ curl http://localhost:8080/hello
-                    Hello, World!
-                    $
+                <code class="python">
+
+                    from webpie import WPApp                                  
+                    
+                    def hello(request, relpath, who="world"):                 #1
+                        my_name = relpath                                     #2
+                        return f"Hello, {who}! I am {my_name}\n"              #3
+                    
+                    WPApp(hello).run_server(8080)                             
 
                 </code>
                 </pre>
 
+                <p>
+                    <ul class=nobullet>
+                        <li>#1 -- the method will accept optional <span class="code">who</span> CGI query argument.</li>
+        
+                        <li>#2 -- <span class="code">relpath</span> will be used to pass server's own name.</li>
+    
+                        <li>#3 -- The response will include both pieces.</li>
+    
+                    </li>
+                    </ul>
+                </p>
+                
+                <p>If you run this script, it will respond to requests like this:</p>
 
+                <pre>
+                <code class="shell">
+                    $ curl "http://localhost:8080/webpie"
+                    Hello, world! I am webpie
+                    
+                    $ curl "http://localhost:8080/webpie?who=User"
+                    Hello, User! I am webpie
+                    
+                    $ curl "http://localhost:8080/server?who=User"
+                    Hello, User! I am server
+                    
+
+                </code>
+                </pre>
+
+                <p>Building a <span class="webpie">WebPie</span> application directly from a web method is quick and
+                    simple, but it gives you access to a very limited portions of <span class="webpie">WebPie</span>
+                    functionality. If you want to take full advantage of <span class="webpie">WebPie</span> 
+                    features and build more sophisticated applications, you will need to use
+                    <span class="code">WPHandler<span> class instead of a Python function like 
+                        <span class="code">hello</span>.
+                </p>
+                
+                <p>Here is a bit more sophisticated web application using WPHandler class:</p>
+
+                <pre>
+                <code class="python">
+
+                    from webpie import WPApp, WPHandler
+                    from datetime import datetime, date
+
+                    class DateTimeHandler(WPHandler):   
+    
+                        def date(self, request, relpath, part=None):
+                            #
+                            # will respond to .../date?part=(year|month|day)
+                            #
+                            today = date.today()
+                            if part == "year":
+                                return str(today.year)+"\n"
+                            elif part == "month":
+                                return str(today.month)+"\n"
+                            elif part == "day":
+                                return str(today.day)+"\n"
+                            else:
+                                return str(today)+"\n"
+
+                        def time(self, request, relpath):                              
+                            #
+                            # will respond to .../time/(hour|minute|second)
+                            #
+                            t = datetime.now()
+                            if relpath == "hour":
+                                    return str(t.hour)+"\n"
+                            elif relpath == "minute":
+                                    return str(t.minute)+"\n"
+                            elif relpath == "second":
+                                    return str(t.second)+"\n"
+                            else:
+                                    return str(t.time())+"\n"
+
+                    WPApp(DateTimeHandler).run_server(8080)
+
+                </code>
+                </pre>
+
+                <p>This application is built using a WPHandler class with two web methods, <span class="code">date</span>
+                    and <span class="code">time</span>. The way <span class="webpie">WebPie</span> request routing
+                    works, a URI like ".../date" will invoke the <span class="code">date</span> method of the
+                    handler, and a URI like ".../time" will be processed by the <span class="code">time</span>
+                    method.
+                </p>
+                
+                <p>These two methods illustrate using 2 different mechanisms to get the query parameters.
+                    The <span class="code">time</span> method uses <span class="code">relpath</span> to
+                    get the part of the time to extract. Whereas the <span class="code">date</span> method
+                    gets the part of the date from the CGI query. So this server will respond to URIs like these:
+                </p>
+                    
+                <pre>
+                <code class="shell">
+                    $ curl "http://localhost:8080/time/hour"
+                    08
+                    
+                    $ curl "http://localhost:8080/time/minute"
+                    18
+                    
+                    $ curl "http://localhost:8080/time/time"
+                    08:18:27.798931
+                    
+                    $ curl "http://localhost:8080/date?part=month"
+                    3
+                    
+                    $ curl "http://localhost:8080/date?part=year"
+                    2021
+                    
+                    $ curl "http://localhost:8080/date"
+                    2021-03-02
+                </code>
+                </pre>
+                
+                    
                 <h2>WSGI</h2>
 
                 <p>
@@ -267,7 +411,7 @@
                 
             <h2>The Shortest Web Service</h2>
                 
-                <p>And here is probably the shortest web service possible. And yes, it is a bit hard to read, but it works:</p>
+                <p>And here, just for fun, is probably the shortest web service possible. And yes, it is a bit hard to read, but it works:</p>
                 
                 <pre>
                 <code class="python">
@@ -292,15 +436,19 @@
             
             <ul>
                 <li><span class="webpie">WebPie</span> uses <a href="https://webob.org/">WebOb</a> to parse and represent the received HTTP request and to produce the response</li>
-                <li><span class="webpie">WebPie</span> lets you build multi-threaded web services. Each (concurrent) HTTP request is handled by its own
-                    Handler object, which uses its own Request object as input. This way the Handlers are completely isolted and independent from each other. But if needed, they
-                    can syncronize using shared persistent WPApp object.
+                <li><span class="webpie">WebPie</span> lets you build multi-threaded web services. 
+                    Each (concurrent) HTTP request is handled by its own instance of the handler class, 
+                    which uses its own WebOb Request object as input. 
+                    This way each HTTP request is handled independently and in isolation from each other. 
+                    But if needed, portions of the code can syncronize using shared persistent WPApp object.
                 </li>
-                <li><span class="webpie">WebPie</span> sessions with persistent data storage</li>
-                <li><a href="https://jinja.palletsprojects.com/">Jinja2</a> - friendly, but does not require Jinja2 to be installed</li>
-                <li>Built-in multi-treaded HTTP/HTTPS server with thread control, which can run as a thread</li>
-                <li>HTTP server supports access to static content</li>
-                <li>WebSockets support</li>
+                <li><span class="webpie">WebPie</span> provides sessions with persistent data storage, which persists
+                    between the requests</li>
+                <li><span class="webpie">WebPie</span> is <a href="https://jinja.palletsprojects.com/">Jinja2</a> - friendly, but does not require Jinja2 to be installed</li>
+                <li><span class="webpie">WebPie</span> comes with simple multi-treaded HTTP/HTTPS server 
+                    with thread control, which can run on the main thread or as another thread.</li>
+                <li><span class="webpie">WebPie</span> supports access to static content</li>
+                <li>WebSockets support is included in <span class="webpie">WebPie</span></li>
             </ul>
                 
         </td>   <!-- main -->
